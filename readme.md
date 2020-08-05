@@ -18,23 +18,22 @@ Please run this before pushing any code!
 
 While you can go click on the folders, here are links to each of the robot projects
 
-- 2016: [Destiny](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Destiny)
+### 2016: [Destiny](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Destiny)
     - [X] Initialized
     - [X] Completed
     - [X] Documented
-    - Finished! (June 18)
-- 2017: [Rafael](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Rafael)
+
+### 2017: [Rafael](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Rafael)
     - [X] Initialized
     - [ ] Completed
     - [ ] Documented
-    - WIP! (Sep 12)
-- 2018: [Wildcard](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Wildcard)
+
+### 2018: [Wildcard](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Wildcard)
     - [X] Initialized
     - [ ] Completed
     - [ ] Documented
-    - WIP! (Aug 29)
-- 2019: [Alfred](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Alfred)
+    
+### 2019: [Alfred](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Alfred)
     - [X] Initialized
     - [ ] Completed
     - [ ] Documented
-    - WIP! (Aug 15)
