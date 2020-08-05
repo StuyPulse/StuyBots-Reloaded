@@ -1,10 +1,10 @@
 #!/bin/bash
 
-LOG_DIRECTORY="BuildLogs"
+LOG_DIRECTORY=".logs"
 LOG_EXTENSION="build.log"
 
 BUILD_SUCCESS="Build Successful!"
-BUILD_ERROR="Errors While Building! (Check Build Logs)"
+BUILD_ERROR="Errors While Building! (Check \"$LOG_DIRECTORY\")"
 GRADLE_MISSING="Missing Gradle Wrapper + Missing Gradle Executable!"
 GRADLE_ERROR="Missing Gradle Wrapper + Issue Generating Wrapper!"
 
@@ -76,7 +76,7 @@ function test_build {
             build_results+=("$1: $BUILD_SUCCESS")
         else
             echo " - Robot project DID NOT build successfully!"
-            echo " - Check Build Logs to see what went wrong!"
+            echo " - Check \"$LOG_DIRECTORY\" to see what went wrong!"
             build_results+=("$1: $BUILD_ERROR")
         fi
     else
