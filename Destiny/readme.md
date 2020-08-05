@@ -25,7 +25,7 @@ The subsystems are the next thing to look at. A subsystem is basically a part of
 
 Some of the values used are from the [Constants.java](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Destiny/src/main/java/frc/robot/Constants.java) file. Be sure to look back if you forget what a value is.
 
-You can look at them here [frc/robot/subsystems/](https://github.com/StuyPulse/Destiny-Reloaded/tree/master/src/main/java/frc/robot/subsystems). 
+You can look at them here [frc/robot/subsystems/](https://github.com/StuyPulse/StuyBots-Reloaded/tree/master/Destiny/src/main/java/frc/robot/subsystems). 
 
 ## Commands 
 
@@ -33,7 +33,7 @@ A command is the part of the code called from [RobotContainer.java](https://gith
 
 When a command is created, it takes in everything it needs to use as a parameter. For example, the [DrivetrainDriveCommand.java](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Destiny/src/main/java/frc/robot/commands/DrivetrainDriveCommand.java) takes in a [Drivetrain](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Destiny/src/main/java/frc/robot/subsystems/Drivetrain.java) and a [Gamepad](https://stuypulse.github.io/StuyLib/com/stuypulse/stuylib/input/gamepads/package-summary.html) as input as they are required in the command.
 
-You can look at them here [frc/robot/commands/](https://github.com/StuyPulse/Destiny-Reloaded/tree/master/src/main/java/frc/robot/commands).
+You can look at them here [frc/robot/commands/](https://github.com/StuyPulse/StuyBots-Reloaded/tree/master/Destiny/src/main/java/frc/robot/commands).
 
 Each of the commands is called and setup in the [RobotContainer.java](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Destiny/src/main/java/frc/robot/RobotContainer.java) file. Look for things like `.setDefaultCommand(...)` and `.whileHeld(...)`.
 
@@ -41,7 +41,7 @@ Each of the commands is called and setup in the [RobotContainer.java](https://gi
 
 An Auton is a group of commands that operates the robot without user input during the first 30 seconds of the game. The auton is selected through smart dashboard. You can add autons to smard dashboard in [RobotContainer.java](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Destiny/src/main/java/frc/robot/RobotContainer.java).
 
-You can find a DoNothingAuton as an example auton here [frc/robot/commands/autos/](https://github.com/StuyPulse/Destiny-Reloaded/tree/master/src/main/java/frc/robot/commands/autos).
+You can find a DoNothingAuton as an example auton here [frc/robot/commands/autos/](https://github.com/StuyPulse/StuyBots-Reloaded/tree/master/Destiny/src/main/java/frc/robot/commands/autos).
 
 
 
