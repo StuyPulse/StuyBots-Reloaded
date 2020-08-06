@@ -37,3 +37,8 @@ While you can go click on the folders, here are links to each of the robot proje
 - [X] Initialized
 - [ ] Completed
 - [ ] Documented
+
+### 2020: [Edwin](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Edwin)
+- [ ] Initialized
+- [ ] Completed
+- [ ] Documented
