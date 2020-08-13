@@ -20,7 +20,44 @@ public interface Constants {
 
     public interface Ports {
         public interface Drivetrain {
+            int LEFT_TOP = 2;
+            int LEFT_MIDDLE = 3;
+            int LEFT_BOTTOM = 1;
+        
+            int RIGHT_TOP = 6;
+            int RIGHT_MIDDLE = 7;
+            int RIGHT_BOTTOM = 5;
+
+            public interface Greyhill {
+                int LEFT_A = 2;
+                int LEFT_B = 3;
+
+                int RIGHT_A = 0;
+                int RIGHT_B = 1;
+            }
         }
+
+        int GEAR_SHIFT = 0;
     }
 
+    interface Drivetrain {
+
+        int CURRENT_LIMIT = 65;
+
+        double WHEEL_DIAMETER = 6;
+        double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
+
+        double OUTER_GEAR_RATIO = 24.0 / 60.0;
+        
+        public interface NEOEncoder {
+            double YIELD = 1.0;
+            double RAW_MULTIPLIER = WHEEL_CIRCUMFERENCE * YIELD;
+        }
+
+        public interface Greyhill {
+            double PULSES_PER_REVOLUTION = 256 * 4.0;
+            double YIELD = 1.3;
+            double INCHES_PER_PULSE = ((WHEEL_CIRCUMFERENCE * OUTER_GEAR_RATIO) / PULSES_PER_REVOLUTION) * YIELD;
+        }
+    }
 }

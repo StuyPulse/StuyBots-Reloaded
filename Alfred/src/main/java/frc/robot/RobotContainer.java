@@ -30,6 +30,9 @@ public class RobotContainer {
     // Create new driver gamepad connected to port 0
     private Gamepad driver = new PS4(0);
 
+    // Create new subsystems
+    private Drivetrain drivetrain = new Drivetrain();
+
     /**
      * Run at creation
      */

@@ -6,12 +6,12 @@ frc/robot/RobotContainer.java
  frc.robot.RobotContainer
 frc/robot/commands/autos/DoNothingAutonCommand.java
  frc.robot.commands.autos.DoNothingAutonCommand
-frc/robot/Robot.java
- frc.robot.Robot
-frc/robot/commands/DrivetrainDriveCommand.java
- frc.robot.commands.DrivetrainDriveCommand
 frc/robot/commands/DrivetrainAlignCommand.java
  frc.robot.commands.DrivetrainAlignCommand
+frc/robot/commands/DrivetrainDriveCommand.java
+ frc.robot.commands.DrivetrainDriveCommand
+frc/robot/Robot.java
+ frc.robot.Robot
 frc/robot/Main.java
  frc.robot.Main
 frc/robot/subsystems/Shooter.java
