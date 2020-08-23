@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.Arrays;
 
-import javax.sound.sampled.Port;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
