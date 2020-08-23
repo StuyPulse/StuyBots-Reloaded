@@ -37,7 +37,16 @@ public interface Constants {
             }
         }
 
+        public interface Intake {
+            int MOTOR = 10;
+        }
+
         int GEAR_SHIFT = 0;
+    }
+
+    interface Intake {
+        double ACQUIRE_SPEED = 1.0;
+        double DEACQUIRE_SPEED = -1.0;
     }
 
     interface Drivetrain {
