@@ -5,10 +5,9 @@ import java.util.Arrays;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.robot.Constants;
-import frc.robot.Constants.Ports;
+
+import static frc.robot.Constants.Drivetrain.*;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.util.TankDriveEncoder;
 
@@ -20,6 +19,10 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/*
+Drivetrain. Intended for default command that considers gamepad input 
+every execute call.
+*/
 public class Drivetrain extends SubsystemBase {
 
     // Turn a list of speed controllers into a speed controller group
@@ -62,15 +65,15 @@ public class Drivetrain extends SubsystemBase {
     public Drivetrain() {
         // 
         leftMotors = new CANSparkMax[] {
-            new CANSparkMax(Ports.Drivetrain.LEFT_TOP, MotorType.kBrushless),
-            new CANSparkMax(Ports.Drivetrain.LEFT_MIDDLE, MotorType.kBrushless),
-            new CANSparkMax(Ports.Drivetrain.LEFT_BOTTOM, MotorType.kBrushless)
+            new CANSparkMax(Ports.LEFT_TOP, MotorType.kBrushless),
+            new CANSparkMax(Ports.LEFT_MIDDLE, MotorType.kBrushless),
+            new CANSparkMax(Ports.LEFT_BOTTOM, MotorType.kBrushless)
         };
         
         rightMotors = new CANSparkMax[] {
-            new CANSparkMax(Ports.Drivetrain.RIGHT_TOP, MotorType.kBrushless),
-            new CANSparkMax(Ports.Drivetrain.RIGHT_MIDDLE, MotorType.kBrushless),
-            new CANSparkMax(Ports.Drivetrain.RIGHT_TOP, MotorType.kBrushless),
+            new CANSparkMax(Ports.RIGHT_TOP, MotorType.kBrushless),
+            new CANSparkMax(Ports.RIGHT_MIDDLE, MotorType.kBrushless),
+            new CANSparkMax(Ports.RIGHT_TOP, MotorType.kBrushless),
         };
 
         configureMotors();
@@ -95,11 +98,11 @@ public class Drivetrain extends SubsystemBase {
         rightNEO = rightMotors[1].getEncoder();
 
         // Greyhill Encoders
-        Encoder leftGreyhill = new Encoder(Ports.Drivetrain.Greyhill.LEFT_A, Ports.Drivetrain.Greyhill.LEFT_B);
-        Encoder rightGreyhill = new Encoder(Ports.Drivetrain.Greyhill.RIGHT_A, Ports.Drivetrain.Greyhill.RIGHT_B);
+        Encoder leftGreyhill = new Encoder(Ports.Greyhill.LEFT_A, Ports.Greyhill.LEFT_B);
+        Encoder rightGreyhill = new Encoder(Ports.Greyhill.RIGHT_A, Ports.Greyhill.RIGHT_B);
     
-        leftGreyhill.setDistancePerPulse(Constants.Drivetrain.Greyhill.INCHES_PER_PULSE);
-        rightGreyhill.setDistancePerPulse(-1.0 * Constants.Drivetrain.Greyhill.INCHES_PER_PULSE);
+        leftGreyhill.setDistancePerPulse(Greyhill.INCHES_PER_PULSE);
+        rightGreyhill.setDistancePerPulse(-1.0 * Greyhill.INCHES_PER_PULSE);
         
         // Wrap up greyhills in TankDriveEncoder Class
         greyhills = new TankDriveEncoder(leftGreyhill, rightGreyhill);
@@ -110,13 +113,13 @@ public class Drivetrain extends SubsystemBase {
         for(CANSparkMax motor : leftMotors) {
             motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
             motor.setInverted(true);
-            motor.setSmartCurrentLimit(Constants.Drivetrain.CURRENT_LIMIT);
+            motor.setSmartCurrentLimit(CURRENT_LIMIT);
         }
 
         for(CANSparkMax motor : rightMotors) {
             motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
             motor.setInverted(true);
-            motor.setSmartCurrentLimit(Constants.Drivetrain.CURRENT_LIMIT);
+            motor.setSmartCurrentLimit(CURRENT_LIMIT);
         }
     }
 

@@ -1,23 +1,29 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.Ports;
+import static frc.robot.Constants.Intake.*;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+/*
+Intake can hold one ball at a time. 
+It's intended use is for instant command bindings.
+
+If ramping is replaced with filtering, the subsystem
+should have a default command and target speeds.
+*/
 public class Intake extends SubsystemBase {
-    
+
     private CANSparkMax motor;
     private CANEncoder encoder;
 
     // encoder = motor.getEncoder();
 
     public Intake() {
-        motor = new CANSparkMax(Ports.Intake.MOTOR, MotorType.kBrushless);
+        motor = new CANSparkMax(Ports.MOTOR, MotorType.kBrushless);
         encoder = motor.getEncoder();
 
         // configure motors
@@ -25,11 +31,11 @@ public class Intake extends SubsystemBase {
     }
 
     public void acquire() {
-        motor.set(Constants.Intake.ACQUIRE_SPEED);
+        motor.set(ACQUIRE_SPEED);
     }
 
     public void deaquire() {
-        motor.set(Constants.Intake.DEACQUIRE_SPEED);
+        motor.set(DEACQUIRE_SPEED);
     }
 
     public void stop() {
@@ -37,20 +43,20 @@ public class Intake extends SubsystemBase {
     }
 
     /*
-
-    FIXME: we don't have to do ramping
-
-    we could have filtering in a periodic() call
-    or a default command where:
-
-    setMotorSpeed(m_filter.get(getMotorSpeed()))
-
-    */
+     * 
+     * FIXME: we don't have to do ramping
+     * 
+     * we could have filtering in a periodic() call or a default command where:
+     * 
+     * setMotorSpeed(m_filter.get(getMotorSpeed()))
+     * 
+     */
 
     // TODO: WHY RAMPING AND WHY NOT CONSTANT
     public void enableRamping() {
         motor.setOpenLoopRampRate(0.5);
     }
+
     public void disableRamping() {
         motor.setOpenLoopRampRate(0.0);
     }
@@ -58,7 +64,7 @@ public class Intake extends SubsystemBase {
     // if there is a ball present, the motor's speed should be zero,
     // this is how to tell if a ball is present
     public double getVelocity() {
-        // it might be a good idea to filter 
+        // it might be a good idea to filter
         return encoder.getVelocity();
     }
 
