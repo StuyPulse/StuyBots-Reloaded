@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import com.stuypulse.stuylib.network.SmartNumber;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /**
  * This contains all of the ports for motors, gamepads, etc.
@@ -15,15 +15,69 @@ import com.stuypulse.stuylib.network.SmartNumber;
  * Try to avoid having random constants around your code.
  * 
  * The reason its an interface is so that all the values are constant
+ * 
  */
 public interface Constants {
 
-    public interface Ports {
-        public interface Drivetrain {
+    interface Intake {
+        interface Ports {
+            int MOTOR = 10;
+        }
+
+        double ACQUIRE_SPEED = 1.0;
+        double DEACQUIRE_SPEED = -1.0;
+    }
+
+    interface Elevator {
+        interface Ports {
+            int MASTER = 8;
+            int FOLLOWER = 9;
+
+            int BRAKE = 6;
+
+            int LIMIT_SWITCH = 5;
+
+            int TILT_A = 5;
+            int TILT_B = 7;
+        }
+
+        double ENCODER_TICKS_PER_REV = 1024.0;
+
+        double ENCODER_RAW_MULTIPLIER = 1 / 1207.0;
+        double HEIGHT_MULTIPLIER = -1;
+
+        boolean BRAKED = true;
+
+        Value TILT_FORWARD = Value.kReverse;
+        Value TILT_BACK = Value.kForward;
+    }
+
+    interface Grabber {
+        interface Ports {
+            int PUSHER_CHANNEL = 0;
+            int FLOOP_CHANNEL = 0;
+
+            // Solenoid class specific
+            int PUSHER_MODULE = 1;
+
+        }
+
+        // Booleans to dictate which position of the solenoid is
+        // the given state. This is used instead of enums and 1-2 helper
+        // functions because, although cleaner, it feels verbose.
+        boolean OPENED = false;
+        boolean EXTENDED = true;
+    }
+
+    interface Drivetrain {
+
+        interface Ports {
+            int GEAR_SHIFT = 0;
+
             int LEFT_TOP = 2;
             int LEFT_MIDDLE = 3;
             int LEFT_BOTTOM = 1;
-        
+
             int RIGHT_TOP = 6;
             int RIGHT_MIDDLE = 7;
             int RIGHT_BOTTOM = 5;
@@ -37,27 +91,13 @@ public interface Constants {
             }
         }
 
-        public interface Intake {
-            int MOTOR = 10;
-        }
-
-        int GEAR_SHIFT = 0;
-    }
-
-    interface Intake {
-        double ACQUIRE_SPEED = 1.0;
-        double DEACQUIRE_SPEED = -1.0;
-    }
-
-    interface Drivetrain {
-
         int CURRENT_LIMIT = 65;
 
         double WHEEL_DIAMETER = 6;
         double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
         double OUTER_GEAR_RATIO = 24.0 / 60.0;
-        
+
         public interface NEOEncoder {
             double YIELD = 1.0;
             double RAW_MULTIPLIER = WHEEL_CIRCUMFERENCE * YIELD;
