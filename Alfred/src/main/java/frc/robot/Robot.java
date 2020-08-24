@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.CompressorControl;
 
 /**
  * This is where everything in the robot is run.
@@ -21,6 +22,7 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
+    private CompressorControl compressorControl;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -29,6 +31,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         m_robotContainer = new RobotContainer();
+        compressorControl = new CompressorControl();
     }
 
     /**
@@ -40,6 +43,8 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         // Checks to see if any commands should be run
         CommandScheduler.getInstance().run();
+
+        compressorControl.update();
     }
 
     @Override
