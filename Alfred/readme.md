@@ -12,15 +12,15 @@ This is a complete recoding of Alfred for the 2020 WPILib.
   * Curviture Drive
 * Intake
   * Hold one ball at a time
-* Penetrator **TODO**
+* Grabber
   * Open and close to grab onto hatches
-* Elevator **TODO**
+  * Add in IR Sensor for hatch detection **TODO**
+* Elevator
   * Move intake and penetrator vertically
-* Compressor **TODO**
-  * ???
+  * Tilt forward & back
+  * break and unbreak
+  * Implement deadbands for moving while at the bottom and at the top **TODO**
 * Plunger
   * Not implemented
 * Tail (find out what this is)
   * ???
-
-
