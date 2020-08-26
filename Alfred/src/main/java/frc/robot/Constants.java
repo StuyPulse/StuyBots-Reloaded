@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.stuypulse.stuylib.streams.filters.*;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /**
@@ -24,7 +26,15 @@ public interface Constants {
             int MOTOR = 10;
         }
 
+        public static IFilter getDefaultFilter() {
+            return new LowPassFilter(0.2); // <-- Newish Ramping Algorithm
+            // return new TimedRateLimit(2); <-- Old Ramping Algorithm
+        }
+
+        double CONTROLLER_DEADBAND = 0.5;
+
         double ACQUIRE_SPEED = 1.0;
+        double STOP_SPEED = 0.0;
         double DEACQUIRE_SPEED = -1.0;
     }
 
@@ -50,6 +60,8 @@ public interface Constants {
 
         Value TILT_FORWARD = Value.kReverse;
         Value TILT_BACK = Value.kForward;
+
+        String SMART_DASHBOARD_INDEX = "USING LIMIT SWITCH";
     }
 
     interface Grabber {
@@ -91,6 +103,7 @@ public interface Constants {
             }
         }
 
+        boolean SAFTEY_ENABLED = false;
         int CURRENT_LIMIT = 65;
 
         double WHEEL_DIAMETER = 6;
@@ -108,5 +121,13 @@ public interface Constants {
             double YIELD = 1.3;
             double INCHES_PER_PULSE = ((WHEEL_CIRCUMFERENCE * OUTER_GEAR_RATIO) / PULSES_PER_REVOLUTION) * YIELD;
         }
+
+        double SPEED_FILTER = 0.3;
+        double TURNING_FILTER = 0.2;
+
+    }
+
+    interface Compressor {
+        String SMART_DASHBOARD_VALUE = "Enable Compressor";
     }
 }

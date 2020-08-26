@@ -5,12 +5,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Grabber.*;
 
 /*
-Grabber, or the hatch subsystem. This subsystem is made for gamepad bindings to instant commands
-that control the grabber.
-
-If the IR sensor present a default command can be used alongside instant command bindings
-
-*/
+ * Grabber, or the hatch subsystem. This subsystem is made for gamepad bindings to instant commands
+ * that control the grabber.
+ * 
+ * If the IR sensor present a default command can be used alongside instant command bindings
+ */
 public class Grabber extends SubsystemBase {
 
     // Solenoid to move the grabber away from the robot and bring it back

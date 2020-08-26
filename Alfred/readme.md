@@ -2,6 +2,18 @@
 
 This is a complete recoding of Alfred for the 2020 WPILib.
 
+## Notes
+
+The drivetrain implementation differs from the original in a few ways (for simplicity):
+ - It will not turnoff one of the motors when in high gear
+ - The only encoders supported are the greyhills
+
+Notable subsystems that are missing are:
+ - The Abom (Suction Cup)
+ - The Tail (What holds the suction cup)
+
+Many of the commands are greatly simplified or just missing all together. This is because this is not made to replace the Alfred code, but be a base line for exending in the future.
+
 ## Subsystems
 
 * Drivetrain
@@ -12,15 +24,14 @@ This is a complete recoding of Alfred for the 2020 WPILib.
   * Curviture Drive
 * Intake
   * Hold one ball at a time
+  * Filtered movement
 * Grabber
   * Open and close to grab onto hatches
-  * Add in IR Sensor for hatch detection **TODO**
 * Elevator
   * Move intake and penetrator vertically
   * Tilt forward & back
   * break and unbreak
-  * Implement deadbands for moving while at the bottom and at the top **TODO**
-* Plunger
-  * Not implemented
-* Tail (find out what this is)
-  * ???
+  * Implement proper checks for top limit and bottom limit **TODO**
+
+
+## Commands

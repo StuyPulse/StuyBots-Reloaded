@@ -7,58 +7,72 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.stuypulse.stuylib.streams.IStream;
+import com.stuypulse.stuylib.streams.filters.IFilter;
 
 /*
-Intake can hold one ball at a time. 
-It's intended use is for instant command bindings.
-
-If ramping is replaced with filtering, the subsystem
-should have a default command and target speeds.
+ * Intake is used to capture balls and hold them. It can hold one ball at a time. 
+ * 
+ * The intake values support ramping because thats what the original did.
+ * 
+ * It's intended use is for instant command bindings.
 */
 public class Intake extends SubsystemBase {
 
+    // Target speed the intake wants to run at
+    private double target;
+
+    // Filter / Stream combo for ramping
+    private IFilter ramp; 
+    private final IStream rampedSpeed = () -> target;
+
+    // Motor + Encoder
     private CANSparkMax motor;
     private CANEncoder encoder;
-
-    // encoder = motor.getEncoder();
 
     public Intake() {
         motor = new CANSparkMax(Ports.MOTOR, MotorType.kBrushless);
         encoder = motor.getEncoder();
 
+        // Disable Ramping
+        disableRamping();
+
         // configure motors
         motor.setIdleMode(IdleMode.kBrake);
     }
 
-    public void acquire() {
-        motor.set(ACQUIRE_SPEED);
+    // Update Motor with ramped speed
+    public void periodic() {
+        motor.set(rampedSpeed.get());
     }
 
-    public void deaquire() {
-        motor.set(DEACQUIRE_SPEED);
+    // Enable / Disable Ramping
+    public Intake setFilter(IFilter filter) {
+        ramp = (filter == null) ? (x -> x) : (filter);
+        return this;
+    }
+
+    public Intake enableRamping() {
+        return setFilter(getDefaultFilter());
+    }
+
+    public Intake disableRamping() {
+        return setFilter(null);
+    }
+
+    // Subsystem controls
+    public void acquire() {
+        // motor.set(ACQUIRE_SPEED);
+        target = ACQUIRE_SPEED;
+    }
+
+    public void deacquire() {
+        // motor.set(DEACQUIRE_SPEED);
+        target = DEACQUIRE_SPEED;
     }
 
     public void stop() {
-        motor.stopMotor();
-    }
-
-    /*
-     * 
-     * FIXME: we don't have to do ramping
-     * 
-     * we could have filtering in a periodic() call or a default command where:
-     * 
-     * setMotorSpeed(m_filter.get(getMotorSpeed()))
-     * 
-     */
-
-    // TODO: WHY RAMPING AND WHY NOT CONSTANT
-    public void enableRamping() {
-        motor.setOpenLoopRampRate(0.5);
-    }
-
-    public void disableRamping() {
-        motor.setOpenLoopRampRate(0.0);
+        target = STOP_SPEED;
     }
 
     // if there is a ball present, the motor's speed should be zero,

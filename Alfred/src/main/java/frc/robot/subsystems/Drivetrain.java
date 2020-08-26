@@ -19,10 +19,15 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-/*
-Drivetrain. Intended for default command that considers gamepad input 
-every execute call.
-*/
+/**
+ * This is a Drivetrain implementation for Alfred
+ * 
+ * Couple things to note about this implementation:
+ *  - The encoders ONLY use the greyhills, not the built in NEOs
+ *  - The drivetrain WILL NOT disable one of the motors in high gear
+ * 
+ * These things were made to simplify the implementation 
+ */
 public class Drivetrain extends SubsystemBase {
 
     // Turn a list of speed controllers into a speed controller group
@@ -63,7 +68,7 @@ public class Drivetrain extends SubsystemBase {
     private DifferentialDrive drivetrain;
 
     public Drivetrain() {
-        // 
+        // Init
         leftMotors = new CANSparkMax[] {
             new CANSparkMax(Ports.LEFT_TOP, MotorType.kBrushless),
             new CANSparkMax(Ports.LEFT_MIDDLE, MotorType.kBrushless),
@@ -84,7 +89,7 @@ public class Drivetrain extends SubsystemBase {
         );
         
         // TODO: why?
-        drivetrain.setSafetyEnabled(false); 
+        drivetrain.setSafetyEnabled(SAFTEY_ENABLED); 
 
         // Gearshift
         gearShift = new Solenoid(Ports.GEAR_SHIFT);    
@@ -123,66 +128,61 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    // Gear Related Things
+    public Gear getGear() {
+        return this.gear;
+    }
+
     public void setGear(Gear gear) {
         gearShift.set(gearToSolenoid((this.gear = gear)));
     }
-
     
-    /**
-     * @return the navx on the drivetrain used for positioning
-     */
+    // Encoder Information
+    // NAVX
     public AHRS getNavX() {
         return navX;
     }
 
-    /**
-     * @return get the angle of the robot
-     */
     public Angle getGyroAngle() {
         return Angle.fromDegrees(navX.getAngle());
     }
     
-    /**
-     * @return DifferentialDrive class based on current gear
-     */
+    // Greyhills
+    public void resetEncoders() {
+        greyhills.reset();
+    }
+
+    public double getDistance() {
+        return greyhills.getDistance();
+    }
+    
+    public double getLeftDistance() {
+        return greyhills.getLeftDistance();
+    }
+    
+    public double getRightDistance() {
+        return greyhills.getRightDistance();
+    }
+
+    // Drivetrain Control
     public DifferentialDrive getCurrentDrive() {
         return drivetrain;
     }
 
-    /**
-     * Stops drivetrain from moving
-     */
     public void stop() {
         tankDrive(0, 0);
     }
 
-    /**
-     * Drives using tank drive
-     * 
-     * @param left  speed of left side
-     * @param right speed of right side
-     */
+
     public void tankDrive(double left, double right) {
         getCurrentDrive().tankDrive(left, right, false);
     }
 
-    /**
-     * Drives using arcade drive
-     * 
-     * @param speed    speed of drive train
-     * @param rotation amount that it is turning
-     */
+
     public void arcadeDrive(double speed, double rotation) {
         getCurrentDrive().arcadeDrive(speed, rotation, false);
     }
 
-    /**
-     * Drives using curvature drive algorithm
-     * 
-     * @param speed     speed of robot
-     * @param rotation  amount that it turns
-     * @param quickturn overrides constant curvature
-     */
     public void curvatureDrive(double speed, double rotation, boolean quickturn) {
         getCurrentDrive().curvatureDrive(speed, rotation, quickturn);
     }

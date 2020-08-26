@@ -29,9 +29,14 @@ public class RobotContainer {
 
     // Create new driver gamepad connected to port 0
     private Gamepad driver = new PS4(0);
+    private Gamepad operator = new PS4(1);
 
     // Create new subsystems
+    private Compressor compressor = new Compressor();
     private Drivetrain drivetrain = new Drivetrain();
+    private Elevator elevator = new Elevator();
+    private Grabber grabber = new Grabber();
+    private Intake intake = new Intake().enableRamping();
 
     /**
      * Run at creation
@@ -46,12 +51,16 @@ public class RobotContainer {
      * Creates default commands for everything to run
      */
     private void configureDefaultCommands() {
+        drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
+        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator, operator));
+        intake.setDefaultCommand(new IntakeDefaultCommand(intake, operator));
     }
 
     /**
      * Creates button bindings for gamepad
      */
     private void configureButtonBindings() {
+        driver.getBottomButton().whenPressed(new DrivetrainToggleGearCommand(drivetrain));
     }
 
     // This lets us select an auton

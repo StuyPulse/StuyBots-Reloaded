@@ -6,9 +6,18 @@ The goal of these projects is not to create competition ready code, but to inste
 
 The purpose of this project is to maintain upto date versions of all of our old robots. While we do not need to maintain entire robot projects as there are no longer competitions for these bots, it is still helpful to have an upto date version of these robots for testing. 
 
-We are not here to implement every feature, we just need to get the majority of robot functions done so that we can do testing on the robots.
+**This is NOT supposed to be a replacements for the original robot code! It is supposed to be a simpler, alternative implementation for these robots to make testing easier**
+
+Because of this, many of the projects implement the subsystems, but not many commands.
+This is done to make expanding on the project easier, as this is not really made to play the game.
 
 ## Note
+
+### Comments 
+
+The robot with the most comments will be [Destiny](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Destiny) because of its simplicity. This [Destiny](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Destiny) implementation is used as an example robot project in a lot of our projects. 
+
+### Committing
 
 Before pushing / commiting code, please run [test_build.sh](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/test_build.sh), which will build each of the robots and report any errors that come back.
 
@@ -35,7 +44,7 @@ While you can go click on the folders, here are links to each of the robot proje
 
 ### 2019: [Alfred](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Alfred)
 - [X] Initialized
-- [ ] Completed
+- [X] Completed
 - [ ] Documented
 
 ### 2020: [Edwin](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Edwin)

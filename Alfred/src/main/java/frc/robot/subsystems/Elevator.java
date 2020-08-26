@@ -12,15 +12,15 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Elevator.*;
 
-/*
-Elevator. Intended use is for default command that considers gamepad input
-to move the elevator vertically.
-
-Instant command bindings should also be made tilting / manual braking.
-*/
+/**
+ * Elevator. Intended use is for default command that considers gamepad input
+ * to move the elevator vertically.
+ * 
+ * Instant command bindings should also be made tilting / manual braking.
+ */
 public class Elevator extends SubsystemBase {
     
-    private static final SmartBoolean LIMIT_SWITCH = new SmartBoolean("USING LIMIT SWITCH", true);
+    private final SmartBoolean usingLimitSwitch;
 
     private WPI_TalonSRX master;
     private WPI_VictorSPX follower;
@@ -45,6 +45,8 @@ public class Elevator extends SubsystemBase {
         tiltLock = new DoubleSolenoid(Ports.TILT_A, Ports.TILT_B);
 
         bottomSensor = new DigitalInput(Ports.LIMIT_SWITCH);
+
+        usingLimitSwitch = new SmartBoolean(SMART_DASHBOARD_INDEX, true);
 
         releaseBrake();
         tiltForward();
@@ -136,7 +138,7 @@ public class Elevator extends SubsystemBase {
 
     // Return the reading from the limit switch
     public boolean isAtBottom() {
-        if (!LIMIT_SWITCH.get()) {
+        if (!usingLimitSwitch.get()) {
             return false;
         }
 
