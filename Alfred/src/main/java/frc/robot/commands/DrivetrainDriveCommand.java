@@ -32,17 +32,9 @@ public class DrivetrainDriveCommand extends CommandBase {
         drivetrain = subsystem;
         driver = gamepad;
         
-        // This makes sure that two commands that need the same subsystem dont mess each other up. 
-        // Example, if a command activated by a button needs to take control away from a default command.
         addRequirements(subsystem);
     }
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
-    }
-
-    // Called 50 times a second if the robot is running
     @Override
     public void execute() {
         // Get the speed from the triggers
@@ -60,10 +52,6 @@ public class DrivetrainDriveCommand extends CommandBase {
         drivetrain.arcadeDrive(speed, turn);
     }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-    }
 
     // Returns true when the command should end.
     @Override

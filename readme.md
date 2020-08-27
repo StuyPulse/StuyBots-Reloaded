@@ -45,7 +45,7 @@ While you can go click on the folders, here are links to each of the robot proje
 ### 2019: [Alfred](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Alfred)
 - [X] Initialized
 - [X] Completed
-- [ ] Documented
+- [X] Documented
 
 ### 2020: [Edwin](https://github.com/StuyPulse/StuyBots-Reloaded/blob/master/Edwin)
 - [ ] Initialized
