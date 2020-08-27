@@ -26,6 +26,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  *  - The encoders ONLY use the greyhills, not the built in NEOs
  *  - The drivetrain WILL NOT disable one of the motors in high gear
  * 
+ * The reason for not using the NEOs is that the NEOs are behind the gear box.
+ * This means what when shifting gears, the values of the NEOs break.
+ * 
  * These things were made to simplify the implementation 
  */
 public class Drivetrain extends SubsystemBase {
@@ -114,7 +117,6 @@ public class Drivetrain extends SubsystemBase {
     }
 
     private void configureMotors() {
-        // TODO: figure out why one was in brake
         for(CANSparkMax motor : leftMotors) {
             motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
             motor.setInverted(true);

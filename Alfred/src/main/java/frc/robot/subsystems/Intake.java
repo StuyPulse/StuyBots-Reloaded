@@ -46,6 +46,28 @@ public class Intake extends SubsystemBase {
         motor.set(rampedSpeed.get());
     }
 
+    
+    // Alter the target speed of the intake
+    public void acquire() {
+        target = ACQUIRE_SPEED;
+    }
+
+    public void deacquire() {
+        target = DEACQUIRE_SPEED;
+    }
+
+    public void stop() {
+        target = STOP_SPEED;
+    }
+
+    // if there is a ball present, the motor's speed should be zero,
+    // this is how to tell if a ball is present
+    // :)
+    // basically the last generation version of the button
+    public double getVelocity() {
+        return encoder.getVelocity();
+    }
+
     // Enable / Disable Ramping
     public Intake setFilter(IFilter filter) {
         ramp = (filter == null) ? (x -> x) : (filter);
@@ -58,28 +80,6 @@ public class Intake extends SubsystemBase {
 
     public Intake disableRamping() {
         return setFilter(null);
-    }
-
-    // Subsystem controls
-    public void acquire() {
-        // motor.set(ACQUIRE_SPEED);
-        target = ACQUIRE_SPEED;
-    }
-
-    public void deacquire() {
-        // motor.set(DEACQUIRE_SPEED);
-        target = DEACQUIRE_SPEED;
-    }
-
-    public void stop() {
-        target = STOP_SPEED;
-    }
-
-    // if there is a ball present, the motor's speed should be zero,
-    // this is how to tell if a ball is present
-    public double getVelocity() {
-        // it might be a good idea to filter
-        return encoder.getVelocity();
     }
 
 }

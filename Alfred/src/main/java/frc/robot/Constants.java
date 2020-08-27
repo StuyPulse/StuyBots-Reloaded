@@ -62,6 +62,8 @@ public interface Constants {
         Value TILT_BACK = Value.kForward;
 
         String SMART_DASHBOARD_INDEX = "USING LIMIT SWITCH";
+
+        double LOW_PASS_RC = 0.5;
     }
 
     interface Grabber {

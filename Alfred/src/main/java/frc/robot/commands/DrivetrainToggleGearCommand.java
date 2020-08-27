@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Drivetrain;
 
 /**
- * 
+ * This command toggles the Gear Shift of the drivetrain
  */
 public class DrivetrainToggleGearCommand extends InstantCommand {
      

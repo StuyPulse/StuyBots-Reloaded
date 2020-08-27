@@ -14,6 +14,8 @@ Notable subsystems that are missing are:
 
 Many of the commands are greatly simplified or just missing all together. This is because this is not made to replace the Alfred code, but be a base line for exending in the future.
 
+Due to the complexity of the Elevator, it is not currently stable code, but it is there if necessary (tilting is important)
+
 ## Subsystems
 
 * Drivetrain

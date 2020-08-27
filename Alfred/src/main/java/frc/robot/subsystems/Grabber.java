@@ -26,6 +26,7 @@ public class Grabber extends SubsystemBase {
         retract();
     }
 
+    // The Opening / Closing of the Grabber
     public boolean isOpen() {
         return opener.get() == OPENED;
     }
@@ -42,6 +43,7 @@ public class Grabber extends SubsystemBase {
         }
     }
 
+    // The Extending and Retracting of the Grabber
     public boolean isExtended() {
         return pusher.get() == EXTENDED;
     }

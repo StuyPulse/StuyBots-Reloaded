@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Elevator.*;
 
 /**
- * Elevator. Intended use is for default command that considers gamepad input
- * to move the elevator vertically.
+ * Elevator's purpose is to move the intake and grabber vertically.
  * 
- * Instant command bindings should also be made tilting / manual braking.
+ * It tilts away and into the robot via a solenoid.
+ * It also has a break to lock the intake and grabber.
+ * 
+ * FIXME: the brake lock is currently unsafe / untested
  */
 public class Elevator extends SubsystemBase {
     
