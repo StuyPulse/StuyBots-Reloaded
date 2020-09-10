@@ -37,3 +37,15 @@ Due to the complexity of the Elevator, it is not currently stable code, but it i
 
 
 ## Commands
+
+- Drivetrain Drive Command
+  - Basic control of the dirvetrain
+
+- Drivetrain Toggle Gear Command
+  - Toggles the gears on the drivetrain
+
+- Elevator Default Command
+  - Uses operator gamepad to move elevator up and down
+
+- Intake Default command
+  - Uses operator gamepad to spin the intake

@@ -18,8 +18,24 @@ import com.stuypulse.stuylib.network.SmartNumber;
  */
 public interface Constants {
 
-    public interface Ports {
-        public interface Drivetrain {
+    public interface Drivetrain {
+        public interface Ports {
+            int LEFT_TOP = 1;
+            int LEFT_BOTTOM = 2;
+            int RIGHT_TOP = 3;
+            int RIGHT_BOTTOM = 4;
+
+            int GEAR_SHIFT = 0;
+        }
+
+        public interface Encoders {
+            int PULSES_PER_REVOLUTION = 256;
+            double WHEEL_DIAMETER = 4.0;
+            double FACTOR = 4.0; // output must be scaled *down* by 4 due to type of encoder
+            double INCHES_PER_REVOLUTION = Math.PI * WHEEL_DIAMETER;
+
+            double LEFT_MULTIPLIER = 1.0;
+            double RIGHT_MULTIPLIER = -1.0;
         }
     }
 

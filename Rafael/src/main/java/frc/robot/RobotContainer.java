@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
@@ -30,6 +31,9 @@ public class RobotContainer {
     // Create new driver gamepad connected to port 0
     private Gamepad driver = new PS4(0);
 
+    // Create Subsystems
+    private Drivetrain drivetrain = new Drivetrain();
+
     /**
      * Run at creation
      */
@@ -43,12 +47,15 @@ public class RobotContainer {
      * Creates default commands for everything to run
      */
     private void configureDefaultCommands() {
+        drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
     }
 
     /**
      * Creates button bindings for gamepad
      */
     private void configureButtonBindings() {
+        driver.getBottomButton().whenActive(new InstantCommand(() -> drivetrain.setGear(Drivetrain.Gear.LOW), drivetrain));
+        driver.getRightButton().whenActive(new InstantCommand(() -> drivetrain.setGear(Drivetrain.Gear.HIGH), drivetrain));
     }
 
     // This lets us select an auton
