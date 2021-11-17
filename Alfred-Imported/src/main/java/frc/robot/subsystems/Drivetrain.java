@@ -9,13 +9,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import static frc.robot.Constants.Drivetrain.*;
 import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.util.TankDriveEncoder;
 
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -34,7 +35,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
 
     // Turn a list of speed controllers into a speed controller group
-    private static SpeedControllerGroup makeControllerGroup(SpeedController... controllers) {
+    private static SpeedController makeControllerGroup(SpeedController... controllers) {
         return new SpeedControllerGroup(controllers[0], Arrays.copyOfRange(controllers, 1, controllers.length));
     }
     
@@ -52,8 +53,7 @@ public class Drivetrain extends SubsystemBase {
     private CANEncoder leftNEO;
     private CANEncoder rightNEO;
 
-    // Class that handles the greyhill encoders
-    private TankDriveEncoder greyhills;
+    // Class that handles the greyhill encoders - removed
 
     // Gyroscope
     private AHRS navX;
@@ -95,7 +95,7 @@ public class Drivetrain extends SubsystemBase {
         drivetrain.setSafetyEnabled(SAFTEY_ENABLED); 
 
         // Gearshift
-        gearShift = new Solenoid(Ports.GEAR_SHIFT);    
+        gearShift = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.GEAR_SHIFT);    
         setGear(Gear.LOW);
         
         // NAV X
@@ -105,15 +105,7 @@ public class Drivetrain extends SubsystemBase {
         leftNEO = leftMotors[1].getEncoder();
         rightNEO = rightMotors[1].getEncoder();
 
-        // Greyhill Encoders
-        Encoder leftGreyhill = new Encoder(Ports.Greyhill.LEFT_A, Ports.Greyhill.LEFT_B);
-        Encoder rightGreyhill = new Encoder(Ports.Greyhill.RIGHT_A, Ports.Greyhill.RIGHT_B);
-    
-        leftGreyhill.setDistancePerPulse(Greyhill.INCHES_PER_PULSE);
-        rightGreyhill.setDistancePerPulse(-1.0 * Greyhill.INCHES_PER_PULSE);
-        
-        // Wrap up greyhills in TankDriveEncoder Class
-        greyhills = new TankDriveEncoder(leftGreyhill, rightGreyhill);
+        // Greyhill Encoders - removed
     }
 
     private void configureMotors() {
@@ -149,22 +141,7 @@ public class Drivetrain extends SubsystemBase {
         return Angle.fromDegrees(navX.getAngle());
     }
     
-    // Greyhills
-    public void resetEncoders() {
-        greyhills.reset();
-    }
-
-    public double getDistance() {
-        return greyhills.getDistance();
-    }
-    
-    public double getLeftDistance() {
-        return greyhills.getLeftDistance();
-    }
-    
-    public double getRightDistance() {
-        return greyhills.getRightDistance();
-    }
+    // Greyhills - removed
 
     // Drivetrain Control
     public DifferentialDrive getCurrentDrive() {

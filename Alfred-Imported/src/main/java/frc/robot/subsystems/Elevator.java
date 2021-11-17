@@ -8,6 +8,7 @@ import com.stuypulse.stuylib.network.SmartBoolean;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Elevator.*;
@@ -43,8 +44,8 @@ public class Elevator extends SubsystemBase {
         configureMotors();
         resetEncoder();
 
-        brake = new Solenoid(Ports.BRAKE);
-        tiltLock = new DoubleSolenoid(Ports.TILT_A, Ports.TILT_B);
+        brake = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.BRAKE);
+        tiltLock = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Ports.TILT_A, Ports.TILT_B);
 
         bottomSensor = new DigitalInput(Ports.LIMIT_SWITCH);
 
