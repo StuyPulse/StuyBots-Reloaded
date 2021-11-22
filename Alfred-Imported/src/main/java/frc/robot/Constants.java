@@ -69,7 +69,7 @@ public interface Constants {
     interface Grabber {
         interface Ports {
             int PUSHER_CHANNEL = 0;
-            int FLOOP_CHANNEL = 0;
+            int FLOOP_CHANNEL = 4;
 
             // Solenoid class specific
             int PUSHER_MODULE = 1;

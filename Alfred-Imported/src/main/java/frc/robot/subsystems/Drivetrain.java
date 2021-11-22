@@ -81,7 +81,7 @@ public class Drivetrain extends SubsystemBase {
         rightMotors = new CANSparkMax[] {
             new CANSparkMax(Ports.RIGHT_TOP, MotorType.kBrushless),
             new CANSparkMax(Ports.RIGHT_MIDDLE, MotorType.kBrushless),
-            new CANSparkMax(Ports.RIGHT_TOP, MotorType.kBrushless),
+            new CANSparkMax(Ports.RIGHT_BOTTOM, MotorType.kBrushless),
         };
 
         configureMotors();
@@ -142,6 +142,7 @@ public class Drivetrain extends SubsystemBase {
         return Angle.fromDegrees(navX.getAngle());
     }
     */
+
     
     // Greyhills - removed
 
