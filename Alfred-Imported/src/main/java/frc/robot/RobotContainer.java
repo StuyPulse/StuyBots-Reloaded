@@ -28,8 +28,7 @@ import com.stuypulse.stuylib.input.Gamepad;
 public class RobotContainer {
 
     // Create new driver gamepad connected to port 0
-    private Gamepad driver = new PS4(0);
-    private Gamepad operator = new PS4(1);
+    private Gamepad driver = new AutoGamepad(0);
 
     // Create new subsystems
     private Compressor compressor = new Compressor();
@@ -51,9 +50,9 @@ public class RobotContainer {
      * Creates default commands for everything to run
      */
     private void configureDefaultCommands() {
-        drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
-        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator, operator));
-        intake.setDefaultCommand(new IntakeDefaultCommand(intake, operator));
+        //drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
+        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator, driver));
+        intake.setDefaultCommand(new IntakeDefaultCommand(intake, driver));
     }
 
     /**

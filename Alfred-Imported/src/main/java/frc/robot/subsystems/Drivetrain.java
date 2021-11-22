@@ -137,9 +137,11 @@ public class Drivetrain extends SubsystemBase {
         return navX;
     }
 
+    /*
     public Angle getGyroAngle() {
         return Angle.fromDegrees(navX.getAngle());
     }
+    */
     
     // Greyhills - removed
 
