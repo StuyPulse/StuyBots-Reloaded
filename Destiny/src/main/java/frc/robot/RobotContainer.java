@@ -61,7 +61,7 @@ public class RobotContainer {
         //    aligns the robot with the target while left button is held
 
         driver.getRightButton().whileHeld(new StartShooterCommand(shooter, 1000));
-        driver.getBottomButton().whileHeld(new StartShooterCommand(shooter, 500));
+        driver.getBottomButton().whileHeld(new StopShooterCommand(shooter));
     
         driver.getLeftButton().whileHeld(new DrivetrainAlignCommand(drivetrain));
     }
