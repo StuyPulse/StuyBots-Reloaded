@@ -32,7 +32,7 @@ public class StartShooterCommand extends CommandBase {
     // Called 50 times a second if the robot is running
     @Override
     public void execute() {
-        shooter.setRPM(targetRPM);
+        shooter.shoot(0.7);
     }
 
     // Called once the command ends or is interrupted.

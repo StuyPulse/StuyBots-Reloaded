@@ -52,7 +52,15 @@ public class Shooter extends SubsystemBase {
         shooter = new WPI_VictorSPX(Ports.SHOOTER);
         targetRPM = 0;
     }
+    
+    public void shoot(double percentOutput) {
+        shooter.set(percentOutput);
+    }
 
+    public void stop() {
+        shooter.set(0);
+    }
+    
     // A function like this would ideally return the RPM of the shooter,
     // but Destiny got gutted of all of its Encoders, So just pretend like this works
     public double getRPM() {
@@ -62,21 +70,22 @@ public class Shooter extends SubsystemBase {
     // This function gets called 50 times a second
     @Override
     public void periodic() {
-        // Update TBH Gain with the gain from smart dashboard
-        // This lets us tune it in real time
-        controller.setGain(Tuning.GAIN.doubleValue());
+        /* Disabled while encoders are broken
+            // Update TBH Gain with the gain from smart dashboard
+            // This lets us tune it in real time
+            controller.setGain(Tuning.GAIN.doubleValue());
 
-        // Gets the error of the motor speed 
-        // ie. how fast it needs to go - how fast its going
-        double error = targetRPM - getRPM();
+            // Gets the error of the motor speed 
+            // ie. how fast it needs to go - how fast its going
+            double error = targetRPM - getRPM();
 
-        // Get the speed we should set the motor too based on error
-        double out = controller.update(error);
+            // Get the speed we should set the motor too based on error
+            double out = controller.update(error);
 
-        // Update the shooter with the correct speed
-        shooter.set(out);
+            // Update the shooter with the correct speed
+            shooter.set(out);
+        */
     }
-
 
     public void setRPM(double rpm) {
         targetRPM = rpm;
