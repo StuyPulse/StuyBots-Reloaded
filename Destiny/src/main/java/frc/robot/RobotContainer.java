@@ -28,7 +28,7 @@ import com.stuypulse.stuylib.input.Gamepad;
 public class RobotContainer {
 
     // Create new driver gamepad connected to port 0
-    private Gamepad driver = new PS4(0);
+    private Gamepad driver = new PS4(1);
 
     // Make the subsystems
     private Drivetrain drivetrain = new Drivetrain();
@@ -60,9 +60,11 @@ public class RobotContainer {
         //    runs shooter half speed while bottom button is held
         //    aligns the robot with the target while left button is held
 
-        driver.getRightButton().whileHeld(new StartShooterCommand(shooter, 1000));
-        driver.getBottomButton().whileHeld(new StartShooterCommand(shooter, 500));
+        //driver.getRightButton().whileHeld(new StartShooterCommand(shooter, 1000));
+        driver.getBottomButton().whenPressed(new StopShooterCommand(shooter));
+        driver.getRightButton().whenPressed(new StartShooterCommand(shooter, 1000));
     
+
         driver.getLeftButton().whileHeld(new DrivetrainAlignCommand(drivetrain));
     }
 

@@ -1,0 +1,9 @@
+[
+  {
+    "artifact": "frcJava (in project Destiny)",
+    "target": "roborio",
+    "debugfile": "frcJava_roborio.debugconfig",
+    "project": "Destiny",
+    "language": "java"
+  }
+]

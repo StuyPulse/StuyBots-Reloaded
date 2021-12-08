@@ -73,7 +73,7 @@ public class DrivetrainAlignCommand extends CommandBase {
         // This is how far away we are from are target value
         // If we want to be looking straight at the target, this would have to be 0
         // But if we are looking away from the target, this will tell us by how much
-        double error = Limelight.getTargetXAngle();
+        double error = Limelight.getInstance().getTargetXAngle();
 
         // The PID Controller will tell us how much we should turn to get to the target
         double out = controller.update(error);

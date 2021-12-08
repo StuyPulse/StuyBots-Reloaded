@@ -81,4 +81,8 @@ public class Shooter extends SubsystemBase {
     public void setRPM(double rpm) {
         targetRPM = rpm;
     }
+    //put this in now shooter works
+    public void stop() {
+        shooter.set(0);
+    }
 }

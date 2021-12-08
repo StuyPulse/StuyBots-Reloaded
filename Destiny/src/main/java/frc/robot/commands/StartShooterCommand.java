@@ -33,6 +33,7 @@ public class StartShooterCommand extends CommandBase {
     @Override
     public void execute() {
         shooter.setRPM(targetRPM);
+        
     }
 
     // Called once the command ends or is interrupted.
