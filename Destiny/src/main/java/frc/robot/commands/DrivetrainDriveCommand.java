@@ -53,9 +53,11 @@ public class DrivetrainDriveCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        IStream rawSpeed = driver::getRightX; 
+        IStream rawSpeed = () -> {
+            return driver.getRightTrigger() - driver.getLeftTrigger();
+        };
 
-        // Get the turn value from the left stick
+        
         
 
         // Filter the Speed and Turn value
