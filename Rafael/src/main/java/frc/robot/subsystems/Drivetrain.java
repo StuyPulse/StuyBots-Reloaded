@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.math.SLMath;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -103,16 +104,51 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // Drivetrain driving interface
-    public void arcadeDrive(double xSpeed, double zRotation) {
-        drivetrain.arcadeDrive(xSpeed, zRotation, false);
-    }
 
-    public void tankDrive(double leftSpeed, double rightSpeed) {
-        drivetrain.tankDrive(leftSpeed, rightSpeed, false);
-    }
-
+    // Stops drivetrain from moving
     public void stop() {
-        tankDrive(0, 0);
+        drivetrain.stopMotor();
     }
 
+    // Drives using tank drive
+    public void tankDrive(double left, double right) {
+        drivetrain.tankDrive(left, right, false);
+    }
+
+    // Drives using arcade drive
+    public void arcadeDrive(double speed, double rotation) {
+        drivetrain.arcadeDrive(speed, rotation, false);
+    }
+
+    // Drives using curvature drive algorithm
+    public void curvatureDrive(double xSpeed, double zRotation, double baseTS) {
+        // Clamp all inputs to valid values;
+        xSpeed = SLMath.clamp(xSpeed, -1.0, 1.0);
+        zRotation = SLMath.clamp(zRotation, -1.0, 1.0);
+        baseTS = SLMath.clamp(baseTS, 0.0, 1.0);
+
+        // Find the amount to slow down turning by.
+        // This is proportional to the speed but has a base value
+        // that it starts from (allows turning in place)
+        double turnAdj = Math.max(baseTS, Math.abs(xSpeed));
+
+        // Find the speeds of the left and right wheels
+        double lSpeed = xSpeed + zRotation * turnAdj;
+        double rSpeed = xSpeed - zRotation * turnAdj;
+
+        // Find the maximum output of the wheels, so that if a wheel tries to go > 1.0
+        // it will be scaled down proportionally with the other wheels.
+        double scale = Math.max(1.0, Math.max(Math.abs(lSpeed), Math.abs(rSpeed)));
+
+        lSpeed /= scale;
+        rSpeed /= scale;
+
+        // Feed the inputs to the drivetrain
+        drivetrain.tankDrive(lSpeed, rSpeed, false);
+    }
+
+    // Drives using curvature drive algorithm with automatic quick turn
+    public void curvatureDrive(double xSpeed, double zRotation) {
+        this.curvatureDrive(xSpeed, zRotation, 0.4);
+    }
 }

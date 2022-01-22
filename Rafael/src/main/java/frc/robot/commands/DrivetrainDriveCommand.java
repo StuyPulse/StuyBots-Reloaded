@@ -31,8 +31,8 @@ public class DrivetrainDriveCommand extends CommandBase {
 
     // These filters help smooth out driving
     // But they are also optional
-    private IFilter speedFilter = new LowPassFilter(0.4);
-    private IFilter turnFilter = new LowPassFilter(0.1);
+    private IFilter speedFilter = new LowPassFilter(0.2);
+    private IFilter turnFilter = new LowPassFilter(0.03);
 
     public DrivetrainDriveCommand(Drivetrain subsystem, Gamepad gamepad) {
         drivetrain = subsystem;
@@ -63,7 +63,7 @@ public class DrivetrainDriveCommand extends CommandBase {
         turn = turnFilter.get(turn);
 
         // Send values to drivetrain
-        drivetrain.arcadeDrive(speed, turn);
+        drivetrain.curvatureDrive(speed, turn);
     }
 
     // Called once the command ends or is interrupted.
