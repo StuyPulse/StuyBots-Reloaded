@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.stuypulse.stuylib.control.PIDController;
+import com.stuypulse.stuylib.math.SLMath;
 
 // Get the constant values relevent to us
 import frc.robot.Constants.Ports;
@@ -31,6 +32,12 @@ public class Drivetrain extends SubsystemBase {
         WPI_TalonSRX backLeft = new WPI_TalonSRX(Ports.Drivetrain.BACK_LEFT);
         WPI_TalonSRX backRight = new WPI_TalonSRX(Ports.Drivetrain.BACK_RIGHT);
         
+        // Invert the motors
+        frontLeft.setInverted(true);
+        frontRight.setInverted(true);
+        backLeft.setInverted(true);
+        backRight.setInverted(true);
+
         // Create two SpeedControllerGroups for the left and right side
         SpeedControllerGroup left = new SpeedControllerGroup(frontLeft, backLeft);
         SpeedControllerGroup right = new SpeedControllerGroup(frontRight, backRight);
@@ -45,11 +52,51 @@ public class Drivetrain extends SubsystemBase {
         // Nothing is called here as the drivetrain is relatively simple
     }
 
-    public void tankDrive(double leftSpeed, double rightSpeed) {
-        drivetrain.tankDrive(leftSpeed, rightSpeed);
+    // Stops drivetrain from moving
+    public void stop() {
+        drivetrain.stopMotor();
     }
-    
-    public void arcadeDrive(double speed, double turn) {
-        drivetrain.arcadeDrive(speed, turn);
+
+    // Drives using tank drive
+    public void tankDrive(double left, double right) {
+        drivetrain.tankDrive(left, right, false);
     }
+
+    // Drives using arcade drive
+    public void arcadeDrive(double speed, double rotation) {
+        drivetrain.arcadeDrive(speed, rotation, false);
+    }
+
+    // Drives using curvature drive algorithm
+    public void curvatureDrive(double xSpeed, double zRotation, double baseTS) {
+        // Clamp all inputs to valid values;
+        xSpeed = SLMath.clamp(xSpeed, -1.0, 1.0);
+        zRotation = SLMath.clamp(zRotation, -1.0, 1.0);
+        baseTS = SLMath.clamp(baseTS, 0.0, 1.0);
+
+        // Find the amount to slow down turning by.
+        // This is proportional to the speed but has a base value
+        // that it starts from (allows turning in place)
+        double turnAdj = Math.max(baseTS, Math.abs(xSpeed));
+
+        // Find the speeds of the left and right wheels
+        double lSpeed = xSpeed + zRotation * turnAdj;
+        double rSpeed = xSpeed - zRotation * turnAdj;
+
+        // Find the maximum output of the wheels, so that if a wheel tries to go > 1.0
+        // it will be scaled down proportionally with the other wheels.
+        double scale = Math.max(1.0, Math.max(Math.abs(lSpeed), Math.abs(rSpeed)));
+
+        lSpeed /= scale;
+        rSpeed /= scale;
+
+        // Feed the inputs to the drivetrain
+        drivetrain.tankDrive(lSpeed, rSpeed, false);
+    }
+
+    // Drives using curvature drive algorithm with automatic quick turn
+    public void curvatureDrive(double xSpeed, double zRotation) {
+        this.curvatureDrive(xSpeed, zRotation, 0.8);
+    }
+
 }

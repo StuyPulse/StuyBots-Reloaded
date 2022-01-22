@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.FilteredIStream;
 import com.stuypulse.stuylib.streams.IStream;
@@ -32,18 +33,21 @@ public class DrivetrainDriveCommand extends CommandBase {
 
     private Drivetrain drivetrain;
     private Gamepad driver;
-    private IStream speed;
+
+    private SmartBoolean tankMode = new SmartBoolean("Driver Settings/Tank Mode", false);
+    private SmartNumber tankFilter = new SmartNumber("Driver Settings/Tank Filter", 0.04);
 
     // These filters help smooth out driving
     // But they are also optional
-    private IFilter speedFilter = new LowPassFilter(0.4);
-    private IFilter turnFilter = new LowPassFilter(0.1);
+    private IFilter speedFilter = new LowPassFilter(0.06);
+    private IFilter turnFilter = new LowPassFilter(0.02);
 
+    private IFilter leftFilter = new LowPassFilter(tankFilter);
+    private IFilter righFilter = new LowPassFilter(tankFilter);
 
     public DrivetrainDriveCommand(Drivetrain subsystem, Gamepad gamepad) {
         drivetrain = subsystem;
         driver = gamepad;
-        
         
         // This makes sure that two commands that need the same subsystem dont mess eachother up. 
         // Example, if a command activated by a button needs to take control away from a default command.
@@ -53,29 +57,31 @@ public class DrivetrainDriveCommand extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        IStream rawSpeed = () -> {
-            return driver.getRightTrigger() - driver.getLeftTrigger();
-        };
-
-        
-        
-
-        // Filter the Speed and Turn value
-        // This is optional, but it leads to a smoother driving experience.
-        SmartNumber power = new SmartNumber("Power Filter", 2);
-        speed = new FilteredIStream(rawSpeed, 
-                                            (x) -> SLMath.deadband(x, 0), 
-                                            (x) -> SLMath.spow(x, power.get()), 
-                                            new LowPassFilter(new SmartNumber("Speed Filter", 0.2)));
     }
 
     // Called 50 times a second if the robot is running
     @Override
     public void execute() {
-        // Get the speed from the triggers
-        double turn = driver.getLeftX();
-        
-        drivetrain.arcadeDrive(speed.get(), turn);
+        if(tankMode.get()) {
+            speedFilter.get(0);
+            turnFilter.get(0);
+
+            double left = leftFilter.get(-driver.getLeftY());
+            double right = righFilter.get(-driver.getRightY());
+
+            drivetrain.tankDrive(left, right);
+        } else {
+            leftFilter.get(0);
+            righFilter.get(0);
+
+            double speed = driver.getRightTrigger() - driver.getLeftTrigger();
+            double turn = driver.getLeftX();
+    
+            speed = speedFilter.get(speed);
+            turn = turnFilter.get(turn);
+    
+            drivetrain.curvatureDrive(speed, turn);
+        }
     }
 
     // Called once the command ends or is interrupted.
