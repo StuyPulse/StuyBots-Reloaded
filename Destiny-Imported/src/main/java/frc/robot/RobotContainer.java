@@ -28,14 +28,11 @@ import com.stuypulse.stuylib.input.Gamepad;
 public class RobotContainer {
 
     // Create new driver gamepad connected to port 0
-    private Gamepad driver = new AutoGamepad(0);
+    private Gamepad driver = new PS4(0);
 
-    // Create new subsystems
-    private Compressor compressor = new Compressor();
+    // Make the subsystems
     private Drivetrain drivetrain = new Drivetrain();
-    private Elevator elevator = new Elevator();
-    private Grabber grabber = new Grabber();
-    private Intake intake = new Intake().enableRamping();
+    private Shooter shooter = new Shooter();
 
     /**
      * Run at creation
@@ -50,16 +47,23 @@ public class RobotContainer {
      * Creates default commands for everything to run
      */
     private void configureDefaultCommands() {
-        //drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
-        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator, driver));
-        intake.setDefaultCommand(new IntakeDefaultCommand(intake, driver));
+        drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
+        shooter.setDefaultCommand(new StopShooterCommand(shooter));
     }
 
     /**
      * Creates button bindings for gamepad
      */
     private void configureButtonBindings() {
-        driver.getBottomButton().whenPressed(new DrivetrainToggleGearCommand(drivetrain));
+        // Basic setup that:
+        //    runs shooter full speed while right button is held
+        //    runs shooter half speed while bottom button is held
+        //    aligns the robot with the target while left button is held
+
+        driver.getRightButton().whileHeld(new StartShooterCommand(shooter, 1000));
+        driver.getBottomButton().whileHeld(new StartShooterCommand(shooter, 500));
+    
+        //driver.getLeftButton().whileHeld(new DrivetrainAlignCommand(drivetrain));
     }
 
     // This lets us select an auton
