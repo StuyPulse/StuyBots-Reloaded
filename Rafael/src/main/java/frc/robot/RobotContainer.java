@@ -29,7 +29,7 @@ import com.stuypulse.stuylib.input.Gamepad;
 public class RobotContainer {
 
     // Create new driver gamepad connected to port 0
-    private Gamepad driver = new PS4(0);
+    private Gamepad driver = new AutoGamepad(0);
 
     // Create Subsystems
     private Drivetrain drivetrain = new Drivetrain();

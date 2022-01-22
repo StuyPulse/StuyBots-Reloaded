@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2020.2.2"
+    id "edu.wpi.first.GradleRIO" version "2021.3.1"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -61,7 +61,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    compile 'com.github.StuyPulse:StuyLib:2020.2.1.1'
+    compile 'com.github.StuyPulse:StuyLib:2021.2.2'
 
     // Enable simulation gui support. Must check the box in vscode to enable support
     // upon debugging
