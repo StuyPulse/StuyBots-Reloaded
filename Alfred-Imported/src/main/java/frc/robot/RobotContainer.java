@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
@@ -28,8 +29,8 @@ import com.stuypulse.stuylib.input.Gamepad;
 public class RobotContainer {
 
     // Create new driver gamepad connected to port 0
-    private Gamepad driver = new PS4(0);
-    private Gamepad operator = new PS4(1);
+    private Gamepad driver = new Xbox(0);
+    private Gamepad operator = new Xbox(1);
 
     // Create new subsystems
     private Compressor compressor = new Compressor();
@@ -54,6 +55,7 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
         elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator, operator));
         intake.setDefaultCommand(new IntakeDefaultCommand(intake, operator));
+        grabber.setDefaultCommand(new GrabberDefaultCommand(grabber, operator));
     }
 
     /**

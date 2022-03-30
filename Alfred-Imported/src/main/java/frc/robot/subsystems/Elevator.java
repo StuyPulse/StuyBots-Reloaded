@@ -10,7 +10,10 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 import static frc.robot.Constants.Elevator.*;
 
 /**
@@ -146,6 +149,13 @@ public class Elevator extends SubsystemBase {
         }
 
         return !bottomSensor.get();
+    }
+
+    @Override
+    public void periodic() {
+        if (Constants.DEBUG_MODE.get()) {
+            SmartDashboard.putBoolean("Elevator/At Bottom?", isAtBottom());
+        }
     }
 
 }

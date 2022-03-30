@@ -82,7 +82,7 @@ public class Drivetrain extends SubsystemBase {
         rightMotors = new CANSparkMax[] {
             new CANSparkMax(Ports.RIGHT_TOP, MotorType.kBrushless),
             new CANSparkMax(Ports.RIGHT_MIDDLE, MotorType.kBrushless),
-            new CANSparkMax(Ports.RIGHT_TOP, MotorType.kBrushless),
+            new CANSparkMax(Ports.RIGHT_BOTTOM, MotorType.kBrushless),
         };
 
         configureMotors();
@@ -126,7 +126,7 @@ public class Drivetrain extends SubsystemBase {
 
         for(CANSparkMax motor : rightMotors) {
             motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-            motor.setInverted(true);
+            motor.setInverted(false);
             motor.setSmartCurrentLimit(CURRENT_LIMIT);
         }
     }
@@ -178,12 +178,12 @@ public class Drivetrain extends SubsystemBase {
 
 
     public void tankDrive(double left, double right) {
-        getCurrentDrive().tankDrive(left, right, false);
+        getCurrentDrive().tankDrive(left, right, true);
     }
 
 
     public void arcadeDrive(double speed, double rotation) {
-        getCurrentDrive().arcadeDrive(speed, rotation, false);
+        getCurrentDrive().arcadeDrive(speed, rotation, true);
     }
 
     public void curvatureDrive(double speed, double rotation, boolean quickturn) {
