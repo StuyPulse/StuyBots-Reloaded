@@ -55,7 +55,7 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
         elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator, operator));
         intake.setDefaultCommand(new IntakeDefaultCommand(intake, operator));
-        grabber.setDefaultCommand(new GrabberDefaultCommand(grabber, operator));
+        //grabber.setDefaultCommand(new GrabberDefaultCommand(grabber, operator));
     }
 
     /**

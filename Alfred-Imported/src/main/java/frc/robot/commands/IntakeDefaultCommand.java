@@ -1,6 +1,10 @@
 package frc.robot.commands;
 
 import com.stuypulse.stuylib.input.Gamepad;
+import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.streams.IStream;
+import com.stuypulse.stuylib.streams.filters.IFilter;
+import com.stuypulse.stuylib.streams.filters.LowPassFilter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
@@ -14,6 +18,7 @@ public class IntakeDefaultCommand extends CommandBase {
     
     private final Intake intake;
     private final Gamepad operator;
+    private IFilter speedFilter = new LowPassFilter(0.2);
 
     public IntakeDefaultCommand(Intake intake, Gamepad operator) {
         this.intake = intake;
@@ -24,7 +29,9 @@ public class IntakeDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         double value = operator.getRightTrigger() - operator.getLeftTrigger();
-
+        value = speedFilter.get(value);
+        value *= 0.5;
+        
         if(value > CONTROLLER_DEADBAND) {
             intake.acquire();
         } else if (value < -CONTROLLER_DEADBAND) {

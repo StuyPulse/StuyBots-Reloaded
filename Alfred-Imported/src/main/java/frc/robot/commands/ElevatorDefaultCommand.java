@@ -28,6 +28,7 @@ public class ElevatorDefaultCommand extends CommandBase {
         stream = operator::getLeftY;
         stream = stream.filtered(
             SLMath::square,
+            x -> x * 0.4,
             x -> x - 0.16,
             x -> SLMath.clamp(x, 0.7),
         
