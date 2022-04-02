@@ -29,8 +29,6 @@ public class IntakeDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         double value = operator.getRightTrigger() - operator.getLeftTrigger();
-        value = speedFilter.get(value);
-        value *= 0.5;
         
         if(value > CONTROLLER_DEADBAND) {
             intake.acquire();
