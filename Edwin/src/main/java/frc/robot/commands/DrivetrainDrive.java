@@ -21,6 +21,6 @@ public class DrivetrainDrive extends CommandBase {
         double speed = gamepad.getRightTrigger() - gamepad.getLeftTrigger();
         double turn = gamepad.getLeftX();
 
-        drivetrain.arcadeDrive(speed, turn);
+        drivetrain.arcadeDriveKalman(speed, turn);
     }
 }

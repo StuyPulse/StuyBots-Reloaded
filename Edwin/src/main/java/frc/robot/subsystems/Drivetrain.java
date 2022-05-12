@@ -23,10 +23,20 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.estimator.KalmanFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.LinearSystemLoop;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -61,6 +71,46 @@ public class Drivetrain extends SubsystemBase {
 
     // State Variable
     private boolean isAligned;
+
+    // State Space
+    private final LinearSystem<N2, N2, N2> model = LinearSystemId.identifyDrivetrainSystem(
+        Constants.DrivetrainSettings.Motion.FeedForward.V, 
+        Constants.DrivetrainSettings.Motion.FeedForward.A,
+        Constants.DrivetrainSettings.Motion.FeedForward.V * 1.2, 
+        Constants.DrivetrainSettings.Motion.FeedForward.A * 0.8
+    ); 
+
+    private final KalmanFilter<N2, N2, N2> observer = new KalmanFilter<>(
+            Nat.N2(),
+            Nat.N2(),
+            model,
+            VecBuilder.fill(3.0, 3.0), // How accurate we think our model is
+            VecBuilder.fill(0.01, 0.01), // How accurate we think our encoder data is
+            0.020
+        );
+
+    // A LQR uses feedback to create voltage commands.
+    private final LinearQuadraticRegulator<N2, N2, N2> controller = new LinearQuadraticRegulator<>(
+            model,
+            VecBuilder.fill(4.0, 4.0), // qelms. Velocity error tolerance, in radians per second. Decrease
+            // this to more heavily penalize state excursion, or make the controller behave
+            // more
+            // aggressively.
+            VecBuilder.fill(12.0, 12.0), // relms. Control effort (voltage) tolerance. Decrease this to more
+            // heavily penalize control effort, or make the controller less aggressive. 12
+            // is a good
+            // starting point because that is the (approximate) maximum voltage of a
+            // battery.
+            0.020); // Nominal time between loops. 0.020 for TimedRobot, but can be lower if using
+                    // notifiers.
+
+    private final LinearSystemLoop<N2, N2, N2> loop = new LinearSystemLoop<>(
+        model,
+        controller,
+        observer,
+        12.0,
+        0.020
+    );
 
     public Drivetrain() {
         // Add Motors to list
@@ -112,10 +162,10 @@ public class Drivetrain extends SubsystemBase {
         setHighGear();
 
         // Add Children to Subsystem
-        addChild("Gear Shift", gearShift);
-        addChild("Differential Drive", drivetrain);
-        addChild("NavX", navx);
-        addChild("Field Map", field);
+        //addChild("Gear Shift", gearShift);
+        //addChild("Differential Drive", drivetrain);
+        //addChild("NavX", navx);
+        //addChild("Field Map", field);
     }
 
     /***********************
@@ -157,7 +207,7 @@ public class Drivetrain extends SubsystemBase {
         }
 
         for (CANSparkMax motor : rightMotors) {
-            motor.setInverted(inverted);
+            motor.setInverted(!inverted);
         }
     }
 
@@ -361,6 +411,25 @@ public class Drivetrain extends SubsystemBase {
     // Drives using curvature drive algorithm with automatic quick turn
     public void curvatureDrive(double xSpeed, double zRotation) {
         this.curvatureDrive(xSpeed, zRotation, DrivetrainSettings.BASE_TURNING_SPEED.get());
+    }
+
+    public void arcadeDriveKalman(double speed, double rotation) {
+        DifferentialDriveWheelSpeeds wheelSpeeds = 
+            Constants.DrivetrainSettings.Motion.KINEMATICS
+                .toWheelSpeeds(new ChassisSpeeds(speed * Constants.DrivetrainSettings.MAX_VELOCITY, 0.0, -rotation));
+
+        tankDriveKalman(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
+    }
+
+    public void tankDriveKalman(double leftMetersPerSecond, double rightMetersPerSecond) {
+        loop.setNextR(VecBuilder.fill(leftMetersPerSecond, rightMetersPerSecond));
+        loop.correct(VecBuilder.fill(getLeftVelocity(), getRightVelocity()));
+        loop.predict(0.020);
+
+        double left_u = loop.getU(0);
+        double right_u = loop.getU(1);
+
+        tankDriveVolts(left_u, right_u);
     }
 
     /*******************

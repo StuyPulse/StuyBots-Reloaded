@@ -47,6 +47,11 @@ public interface Constants {
             int GEAR_SHIFT = 0;
         }
 
+        public interface Pneumatics {
+            int ANALOG_PRESSURE_SWITCH_PORT = 0;
+            double ANALOG_PRESSURE_SWITCH_VOLTAGE_SUPPLY = 5.0;
+        }
+
     }
 
     public interface Feeder {
@@ -75,11 +80,13 @@ public interface Constants {
         boolean IS_INVERTED = true;
 
         // The voltage multipliers for each side
-        double RIGHT_VOLTAGE_MUL = -1.0;
+        double RIGHT_VOLTAGE_MUL = 1.0;
         double LEFT_VOLTAGE_MUL = 1.0;
 
         // Width of the robot
         double TRACK_WIDTH = Units.inchesToMeters(27);
+
+        double MAX_VELOCITY = Units.feetToMeters(16);
 
         interface Motion {
 

@@ -13,20 +13,24 @@ import frc.robot.Constants.Ports;
 import frc.robot.commands.DrivetrainDrive;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Pump;
 
 public class RobotContainer {
 
     public final Drivetrain drivetrain = new Drivetrain();
     public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
     public final Feeder feeder = new Feeder();
+    public final Pump pump = new Pump();
 
     public RobotContainer() {
         configureButtonBindings();
         configureDefaultCommands();
+
+        pump.compress();
     }
 
     private void configureButtonBindings() {
-        
+
     }
 
     private void configureDefaultCommands() {
