@@ -30,8 +30,8 @@ import com.stuypulse.stuylib.input.Gamepad;
 public class RobotContainer {
 
     // Create new driver gamepad connected to port 0
-    public Gamepad driver = new AutoGamepad(0);
-    public Gamepad operator = new AutoGamepad(1);
+    private Gamepad driver = new AutoGamepad(0);
+    private Gamepad operator = new AutoGamepad(1);
 
     // Create new subsystems
     private Compressor compressor = new Compressor();
