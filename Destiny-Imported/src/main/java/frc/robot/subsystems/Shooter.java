@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -44,7 +43,6 @@ public class Shooter extends SubsystemBase {
 
     private WPI_VictorSPX shooter;
     private double targetRPM;
-    private int targetPWM;
 
     public Shooter() {
         // Make the TBH Controller
@@ -61,10 +59,6 @@ public class Shooter extends SubsystemBase {
         return 0.0;
     }
 
-    public int getPWM() {
-        return 0;
-    }
-
     // This function gets called 50 times a second
     @Override
     public void periodic() {
@@ -74,8 +68,7 @@ public class Shooter extends SubsystemBase {
 
         // Gets the error of the motor speed 
         // ie. how fast it needs to go - how fast its going
-        //double error = targetRPM - getRPM();
-        int error = targetPWM - getPWM();
+        double error = targetRPM - getRPM();
 
         // Get the speed we should set the motor too based on error
         double out = controller.update(error);
@@ -87,8 +80,5 @@ public class Shooter extends SubsystemBase {
 
     public void setRPM(double rpm) {
         targetRPM = rpm;
-    }
-    public void setPWM(int pwm) {
-        targetPWM = pwm;
     }
 }
