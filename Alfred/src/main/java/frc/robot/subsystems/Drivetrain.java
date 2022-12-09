@@ -9,9 +9,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import static frc.robot.Constants.Drivetrain.*;
 import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.util.TankDriveEncoder;
+import frc.robot.util.TankDriveEncoder;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -81,7 +82,7 @@ public class Drivetrain extends SubsystemBase {
         rightMotors = new CANSparkMax[] {
             new CANSparkMax(Ports.RIGHT_TOP, MotorType.kBrushless),
             new CANSparkMax(Ports.RIGHT_MIDDLE, MotorType.kBrushless),
-            new CANSparkMax(Ports.RIGHT_TOP, MotorType.kBrushless),
+            new CANSparkMax(Ports.RIGHT_BOTTOM, MotorType.kBrushless),
         };
 
         configureMotors();
@@ -95,7 +96,7 @@ public class Drivetrain extends SubsystemBase {
         drivetrain.setSafetyEnabled(SAFTEY_ENABLED); 
 
         // Gearshift
-        gearShift = new Solenoid(Ports.GEAR_SHIFT);    
+        gearShift = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.GEAR_SHIFT);    
         setGear(Gear.LOW);
         
         // NAV X
@@ -125,7 +126,7 @@ public class Drivetrain extends SubsystemBase {
 
         for(CANSparkMax motor : rightMotors) {
             motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-            motor.setInverted(true);
+            motor.setInverted(false);
             motor.setSmartCurrentLimit(CURRENT_LIMIT);
         }
     }
@@ -177,12 +178,12 @@ public class Drivetrain extends SubsystemBase {
 
 
     public void tankDrive(double left, double right) {
-        getCurrentDrive().tankDrive(left, right, false);
+        getCurrentDrive().tankDrive(left, right, true);
     }
 
 
     public void arcadeDrive(double speed, double rotation) {
-        getCurrentDrive().arcadeDrive(speed, rotation, false);
+        getCurrentDrive().arcadeDrive(speed, rotation, true);
     }
 
     public void curvatureDrive(double speed, double rotation, boolean quickturn) {

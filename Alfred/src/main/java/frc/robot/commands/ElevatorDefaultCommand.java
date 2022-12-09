@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import com.stuypulse.stuylib.input.Gamepad;
+import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.*;
 import com.stuypulse.stuylib.streams.filters.*;
 
@@ -25,16 +26,21 @@ public class ElevatorDefaultCommand extends CommandBase {
         
         // chad code
         stream = operator::getLeftY;
-        stream = stream.filtered(new LowPassFilter(LOW_PASS_RC));
+        stream = stream.filtered(
+            SLMath::square,
+            x -> x * 0.4,
+            x -> x - 0.16,
+            x -> SLMath.clamp(x, 0.7),
+        
+            new LowPassFilter(LOW_PASS_RC)
+        );
 
         addRequirements(elevator);
     }
 
     @Override
     public void execute() {
-        double moveSpeed = stream.get();
-        
-        elevator.move(moveSpeed);
+        elevator.move(stream.get());
     }
     
     @Override

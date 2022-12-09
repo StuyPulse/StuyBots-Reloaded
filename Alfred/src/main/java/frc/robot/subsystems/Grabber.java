@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Grabber.*;
@@ -19,8 +20,8 @@ public class Grabber extends SubsystemBase {
     private Solenoid opener;
 
     public Grabber() {
-        opener = new Solenoid(Ports.FLOOP_CHANNEL);
-        pusher = new Solenoid(Ports.PUSHER_MODULE, Ports.PUSHER_CHANNEL);
+        opener = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.FLOOP_CHANNEL);
+        pusher = new Solenoid(Ports.PUSHER_MODULE, PneumaticsModuleType.CTREPCM, Ports.PUSHER_CHANNEL);
 
         close();
         retract();

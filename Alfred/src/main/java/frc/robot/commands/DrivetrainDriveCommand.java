@@ -8,8 +8,10 @@
 package frc.robot.commands;
 
 import com.stuypulse.stuylib.input.Gamepad;
+import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.streams.filters.*;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Drivetrain;
@@ -20,6 +22,8 @@ import static frc.robot.Constants.Drivetrain.*;
  * This is just a simple Drivetrain Drive Command that implements very simple filters.
  */
 public class DrivetrainDriveCommand extends CommandBase {
+
+    private SmartBoolean slowMode = new SmartBoolean("Drivetrain/slow mode", true);
 
     private Drivetrain drivetrain;
     private Gamepad driver;
@@ -38,10 +42,15 @@ public class DrivetrainDriveCommand extends CommandBase {
     @Override
     public void execute() {
         // Get the speed from the triggers
-        double speed = driver.getRightTrigger() - driver.getLeftTrigger();
-
+        double speed = (driver.getRightTrigger() - driver.getLeftTrigger());
+        if (slowMode.get()) {
+            speed *= 0.4;
+        }
         // Get the turn value from the left stick
         double turn = driver.getLeftX();
+        if (slowMode.get()) {
+            turn *= 0.4;
+        }
 
         // Filter the Speed and Turn value
         // This is optional, but it leads to a smoother driving experience.
