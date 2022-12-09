@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.stuypulse.stuylib.network.SmartBoolean;
+import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.filters.*;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -59,16 +60,37 @@ public interface Constants {
         double ENCODER_RAW_MULTIPLIER = 1 / 1207.0;
         double HEIGHT_MULTIPLIER = -1;
 
-        boolean BRAKED = true;
+        double MIN_HEIGHT = 0;
 
+        boolean BRAKED = true;
         Value TILT_FORWARD = Value.kReverse;
         Value TILT_BACK = Value.kForward;
 
         String SMART_DASHBOARD_INDEX = "USING LIMIT SWITCH";
 
         double LOW_PASS_RC = 0.5;
-    }
 
+        public interface Encoder {
+			double ENCODER_MULTIPLIER = 6.175038019510467E-5 * 0.0254;
+		}
+
+		public interface PID {
+			SmartNumber kP = new SmartNumber("kP", 2.0);
+			SmartNumber kI = new SmartNumber("kI", 0.1);
+			SmartNumber kD = new SmartNumber("kD", 0.0);
+		}
+
+		public interface FF {
+			SmartNumber kG = new SmartNumber("kG", 0.50);
+			SmartNumber kS = new SmartNumber("kS", 0.10);
+			SmartNumber kV = new SmartNumber("kV", 0.30);
+			SmartNumber kA = new SmartNumber("kA", 0.06);
+		}
+        public interface MotionProfile{
+            SmartNumber VEL_LIMIT = new SmartNumber("Elevator/Velocity Limit", 8);
+            SmartNumber ACCEL_LIMIT = new SmartNumber("Elevator/Acceleration Limit", 2);
+        }
+    }
     interface Grabber {
         interface Ports {
             int PUSHER_CHANNEL = 0;

@@ -4,10 +4,16 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.stuypulse.stuylib.control.Controller;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.Feedforward;
 import com.stuypulse.stuylib.network.SmartBoolean;
+import com.stuypulse.stuylib.network.SmartNumber;
+import com.stuypulse.stuylib.streams.filters.MotionProfile;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,30 +21,30 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import static frc.robot.Constants.Elevator.*;
+import static frc.robot.Constants.Elevator.PID.*;
+import static frc.robot.Constants.Elevator.FF.*;
+import static frc.robot.Constants.Elevator.MotionProfile.*;
 
-/**
- * Elevator's purpose is to move the intake and grabber vertically.
- * 
- * It tilts away and into the robot via a solenoid.
- * It also has a break to lock the intake and grabber.
- * 
- * FIXME: the brake lock is currently unsafe / untested
- */
+
+
 public class Elevator extends SubsystemBase {
-    
-    private final SmartBoolean usingLimitSwitch;
 
+    // Motors
     private WPI_TalonSRX master;
     private WPI_VictorSPX follower;
 
-    // Prevent the grabber/intake from falling after lifting
-    private Solenoid brake;
+    // Solenoids
+    private Solenoid brake; // Prevent the grabber/intake from falling after lifting
+    private DoubleSolenoid tiltLock; // Controls the rotation of the elevator (because it can tilt away from the robot)
 
-    // Controls the rotation of the elevator (because it can tilt away from the robot)
-    private DoubleSolenoid tiltLock;
+    // Sensors
+    private SmartBoolean usingLimitSwitch;
+    private DigitalInput bottomLimitSwitch; // Limit switch to detect grabber/intake at the bottom of the elevator
 
-    // Limit switch to detect grabber/intake at the bottom of the elevator
-    private DigitalInput bottomSensor;
+    // Control
+    private final Controller position;
+	private final SmartNumber targetHeight;
+
 
     public Elevator() {
         master = new WPI_TalonSRX(Ports.MASTER);
@@ -50,15 +56,19 @@ public class Elevator extends SubsystemBase {
         brake = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.BRAKE);
         tiltLock = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Ports.TILT_A, Ports.TILT_B);
 
-        bottomSensor = new DigitalInput(Ports.LIMIT_SWITCH);
+        bottomLimitSwitch = new DigitalInput(Ports.LIMIT_SWITCH);
+        usingLimitSwitch = new SmartBoolean("Elevator/Using Limit Switch", true);
 
-        usingLimitSwitch = new SmartBoolean(SMART_DASHBOARD_INDEX, true);
+        position = new PIDController(kP, kI, kD)
+            .add(new Feedforward.Elevator(kG, kS, kV, kA).position())
+            .setOutputFilter(new MotionProfile(VEL_LIMIT, ACCEL_LIMIT));
+		targetHeight = new SmartNumber("Elevator Target Height", MIN_HEIGHT);
 
         releaseBrake();
         tiltForward();
     }
 
-    // Setup encoder and master/follower setup
+    // TODO: REMOVE !!!!
     private void configureMotors() {
         follower.follow(master);
 
@@ -68,32 +78,10 @@ public class Elevator extends SubsystemBase {
         master.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     }
 
-    // Reset encoder
-    public void resetEncoder() {
-        master.setSelectedSensorPosition(0,0,0);
+    public void resetEncoder(){
+        master.setSelectedSensorPosition(0, 0, 0);
     }
 
-    // Raw encoder reading
-    private double getRawEncoderReading() {
-        return master.getSelectedSensorPosition();
-    }
-
-    // Stop by turning off motor and braking
-    public void stop() {
-        move(0);
-        enableBrake();
-    }
-
-    // Apply algorithm to get height
-    public double getHeight() {
-        return getRawEncoderReading() * ENCODER_RAW_MULTIPLIER * HEIGHT_MULTIPLIER;
-    }
-
-    // private void setHeight(double height)
-
-    // Release brake and move unless you are at bottom and attempting to go down
-    // TODO: figure out what was done with the proportionality thing in alfred
-    // TODO: dont move when elevator is at top
     public void move(double speed) {
         if (isAtBottom() && speed < 0) {
             stop();
@@ -104,26 +92,62 @@ public class Elevator extends SubsystemBase {
         master.set(speed);
     }
 
-    // Brake elevator
-    public void enableBrake() {
-        if (!isBraked()) {
-            brake.set(BRAKED);
+    // Stop by turning off motor and braking
+    public void stop() {
+        move(0);
+        enableBrake();
+    }
+
+
+    // TODO: CHECK IF DIV by 60
+    public double getVelocity(){ 
+        return master.getSelectedSensorVelocity() * -Constants.Elevator.Encoder.ENCODER_MULTIPLIER / 60.0;
+    }
+
+    public double getHeight() {
+        return master.getSelectedSensorVelocity() * -Constants.Elevator.Encoder.ENCODER_MULTIPLIER;
+    }
+
+    
+
+    // TODO: Check if inverted
+    public boolean atBottom() {
+        return bottomLimitSwitch.get();
+    }
+    
+    private void setEncoder(double heightMeters) {
+		master.setSelectedSensorPosition(heightMeters / ENCODER_RAW_MULTIPLIER);
+	}
+
+    private void setVoltage(double voltage) {
+		if (atBottom() && voltage < 0) {
+			DriverStation.reportWarning("Bottom Limit Switch reached", false);
+
+			setEncoder(MIN_HEIGHT);
+			
+			voltage = 0.0;
+		} 
+
+		master.setVoltage(voltage);
+		follower.setVoltage(voltage);
+	}
+    
+    public void releaseBrake(){
+        if(!isBraked()){
+            brake.set(false);
         }
     }
 
-    // Release brake
-    public void releaseBrake() {
-        if (isBraked()) {
-            brake.set(!BRAKED);
+    public void enableBrake(){
+        if(isBraked()){
+            brake.set(true);
         }
     }
-
-    // Check state of elevator brake
-    public boolean isBraked() {
+    
+    public boolean isBraked(){
         return brake.get() == BRAKED;
     }
 
-    // Tilt forward
     public void tiltForward() {
         if (!isTilted()) {
             tiltLock.set(TILT_FORWARD);
@@ -136,26 +160,35 @@ public class Elevator extends SubsystemBase {
             tiltLock.set(TILT_BACK);
         }
     }
-
-    // Is tilted forward
-    public boolean isTilted() {
-        return tiltLock.get() == TILT_FORWARD;
+    
+    public boolean isTilted(){
+        return tiltLock.get() == TILT_BACK;
     }
 
-    // Return the reading from the limit switch
+    
+    
     public boolean isAtBottom() {
         if (!usingLimitSwitch.get()) {
             return false;
         }
 
-        return !bottomSensor.get();
+        return !bottomLimitSwitch.get();
+    }
+    public double getTargetHeight(){
+        return targetHeight.get();
+    }
+
+    public void setTargetHeight(double height){
+        targetHeight.set(height);
     }
 
     @Override
     public void periodic() {
+        setVoltage(position.update(getHeight(), getTargetHeight()));
         if (Constants.DEBUG_MODE.get()) {
             SmartDashboard.putBoolean("Elevator/At Bottom?", isAtBottom());
         }
     }
+    
 
 }
