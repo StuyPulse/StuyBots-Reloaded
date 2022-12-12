@@ -120,13 +120,13 @@ public class Elevator extends SubsystemBase {
 	}
 
     private void setVoltage(double voltage) {
-		if (atBottom() && voltage < 0) {
-			DriverStation.reportWarning("Bottom Limit Switch reached", false);
+		// if (atBottom() && voltage < 0) {
+		// 	 DriverStation.reportWarning("Bottom Limit Switch reached", false);
 
-			setEncoder(MIN_HEIGHT);
+		// 	setEncoder(MIN_HEIGHT);
 			
-			voltage = 0.0;
-		} 
+		// 	voltage = 0.0;
+		// } 
 
 		master.setVoltage(voltage);
 		follower.setVoltage(voltage);
@@ -180,6 +180,10 @@ public class Elevator extends SubsystemBase {
 
     public void setTargetHeight(double height){
         targetHeight.set(height);
+    }
+
+    public void addTargetHeight(double height){
+        targetHeight.set(height + targetHeight.get());
     }
 
     @Override

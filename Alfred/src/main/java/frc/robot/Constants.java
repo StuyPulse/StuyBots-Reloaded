@@ -55,6 +55,8 @@ public interface Constants {
             int TILT_B = 7;
         }
 
+        double SPEED = 0.6;
+
         double ENCODER_TICKS_PER_REV = 1024.0;
 
         double ENCODER_RAW_MULTIPLIER = 1 / 1207.0;

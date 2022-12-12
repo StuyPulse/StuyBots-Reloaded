@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 // Import all the commands and subsystems
 import frc.robot.commands.*;
+import frc.robot.commands.Elevator.ElevatorDefaultCommand;
+import frc.robot.commands.Elevator.ElevatorDrive;
 import frc.robot.commands.autos.*;
 import frc.robot.subsystems.*;
 
@@ -63,7 +65,7 @@ public class RobotContainer {
 
 
         drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
-        elevator.setDefaultCommand(new ElevatorDefaultCommand(elevator, operator));
+        elevator.setDefaultCommand(new ElevatorDrive(elevator, operator));
         intake.setDefaultCommand(new IntakeDefaultCommand(intake, operator));
         grabber.setDefaultCommand(new GrabberDefaultCommand(grabber, operator));
     }
