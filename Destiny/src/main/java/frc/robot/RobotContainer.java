@@ -32,7 +32,7 @@ public class RobotContainer {
 
     // Make the subsystems
     private Drivetrain drivetrain = new Drivetrain();
-    private Shooter shooter = new Shooter();
+    //private Shooter shooter = new Shooter();
 
     /**
      * Run at creation
@@ -48,7 +48,7 @@ public class RobotContainer {
      */
     private void configureDefaultCommands() {
         drivetrain.setDefaultCommand(new DrivetrainDriveCommand(drivetrain, driver));
-        shooter.setDefaultCommand(new StopShooterCommand(shooter));
+        //Shooter.setDefaultCommand(new StopShooterCommand(shooter));
     }
 
     /**
@@ -61,11 +61,10 @@ public class RobotContainer {
         //    aligns the robot with the target while left button is held
 
         //driver.getRightButton().whileHeld(new StartShooterCommand(shooter, 1000));
-        driver.getBottomButton().whenPressed(new StopShooterCommand(shooter));
-        driver.getRightButton().whenPressed(new StartShooterCommand(shooter, 1000));
-    
+        // driver.getBottomButton().onTrue(new StopShooterCommand(shooter));
+        // driver.getRightButton().onTrue(new StartShooterCommand(shooter, 1000));
 
-        driver.getLeftButton().whileHeld(new DrivetrainAlignCommand(drivetrain));
+        //driver.getLeftButton().onTrue(new DrivetrainAlignCommand(drivetrain));
     }
 
     // This lets us select an auton

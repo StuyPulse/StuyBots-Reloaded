@@ -6,13 +6,13 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
-
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.stuypulse.stuylib.control.PIDController;
+import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.SLMath;
 
 // Get the constant values relevent to us
@@ -21,6 +21,8 @@ import frc.robot.Constants.Ports;
 public class Drivetrain extends SubsystemBase {
 
     private DifferentialDrive drivetrain;
+    private final MotorControllerGroup left;
+    private final MotorControllerGroup right;
 
     /**
      * Initialize Drivetrain subsystem
@@ -38,12 +40,13 @@ public class Drivetrain extends SubsystemBase {
         backLeft.setInverted(true);
         backRight.setInverted(true);
 
-        // Create two SpeedControllerGroups for the left and right side
-        SpeedControllerGroup left = new SpeedControllerGroup(frontLeft, backLeft);
-        SpeedControllerGroup right = new SpeedControllerGroup(frontRight, backRight);
+        // Create two array for motors for the left and right side
+        left = new MotorControllerGroup(frontLeft, frontRight);
+        right = new MotorControllerGroup(backLeft, backRight);
 
         // Make the drivetrain
         drivetrain = new DifferentialDrive(left, right);
+
     }
 
     // This function gets called 50 times a second
